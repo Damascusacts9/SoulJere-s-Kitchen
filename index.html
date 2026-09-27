@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SoulJere's Kitchen</title>
+  <style>
+    :root {
+      --ink: #1c1917;
+      --paper: #f6f1e8;
+      --band: #1f1b18;
+      --rust: #9a3412;
+      --mute: #78716c;
+      --line: #d6d3d1;
+      --ok: #166534;
+      --card: #fffdf8;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; background: var(--paper); color: var(--ink); font-family: Georgia, "Times New Roman", serif; }
+    body { min-height: 100vh; }
+    header {
+      background: var(--band);
+      color: #fafaf9;
+      padding: 1rem 1.1rem 0.9rem;
+      position: sticky; top: 0; z-index: 20;
+    }
+    header .top { display: flex; justify-content: space-between; align-items: flex-start; gap: 0.75rem; }
+    header .brand { font-size: 1.35rem; letter-spacing: 0.02em; }
+    header .tag { color: #d6d3d1; font-size: 0.82rem; font-style: italic; margin-top: 0.15rem; }
+    .units {
+      display: flex; align-items: center; gap: 0.4rem;
+      font-size: 0.8rem; color: #e7e5e4; white-space: nowrap;
+    }
+    .units select {
+      max-width: none; font-size: 0.8rem; background: #292524; color: #fafaf9;
+      border-color: #57534e;
+    }
+    nav { display: flex; gap: 0.35rem; flex-wrap: wrap; margin-top: 0.75rem; }
+    nav button {
+      background: transparent; color: #e7e5e4; border: 1px solid #44403c;
+      border-radius: 999px; padding: 0.35rem 0.75rem; font: inherit; font-size: 0.85rem;
+      cursor: pointer;
+    }
+    nav button.on { background: var(--rust); border-color: var(--rust); color: white; }
+    main { max-width: 720px; margin: 0 auto; padding: 1.1rem 1rem 3rem; }
+    .view { display: none; }
+    .view.on { display: block; }
+    h1 { font-size: 1.7rem; line-height: 1.2; margin: 0.2rem 0 0.4rem; }
+    h2 { font-size: 1.15rem; margin: 1.3rem 0 0.45rem; }
+    p, li { line-height: 1.45; }
+    .mute { color: var(--mute); }
+    .badge {
+      display: inline-block; font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase;
+      padding: 0.18rem 0.5rem; border-radius: 999px; font-style: normal;
+    }
+    .free { background: #dcfce7; color: var(--ok); }
+    .kitchen { background: #ffedd5; color: var(--rust); }
+    .hero { width: 100%; border-radius: 12px; display: block; margin: 0.7rem 0 0.35rem; }
+    .caption { font-size: 0.82rem; color: var(--mute); font-style: italic; margin-bottom: 0.8rem; }
+    .meta { font-size: 0.92rem; color: #44403c; }
+    .card {
+      background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+      padding: 0.85rem 0.9rem; margin: 0.65rem 0;
+    }
+    .toggles { display: grid; gap: 0.55rem; }
+    label.toggle {
+      display: flex; justify-content: space-between; align-items: center; gap: 0.6rem;
+      font-size: 0.95rem;
+    }
+    select {
+      font: inherit; font-size: 0.9rem; padding: 0.28rem 0.4rem;
+      border-radius: 8px; border: 1px solid #a8a29e; background: white; max-width: 55%;
+    }
+    ul.ing { padding-left: 1.15rem; }
+    ul.ing li { margin: 0.25rem 0; }
+    ol.steps { padding-left: 1.2rem; }
+    ol.steps li { margin: 0.45rem 0; }
+    .dont { border-left: 4px solid var(--rust); }
+    .recipe-list button.link {
+      display: block; width: 100%; text-align: left; background: var(--card);
+      border: 1px solid var(--line); border-radius: 12px; padding: 0.9rem;
+      margin: 0.55rem 0; cursor: pointer; font: inherit; color: inherit;
+    }
+    .price { font-size: 2rem; margin: 0.2rem 0; }
+    footer { font-size: 0.8rem; color: var(--mute); text-align: center; margin-top: 2rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="top">
+      <div>
+        <div class="brand">SoulJere's Kitchen</div>
+        <div class="tag">Locked cooks. Toggles stay. Laborer is worthy of his wages.</div>
+      </div>
+      <label class="units">Units
+        <select id="units" aria-label="Measurement units">
+          <option value="us">US (freedom)</option>
+          <option value="metric">Metric</option>
+        </select>
+      </label>
+    </div>
+    <nav>
+      <button data-view="home" class="on">Kitchen</button>
+      <button data-view="skillet">Skillet</button>
+      <button data-view="zuppa">Zuppa</button>
+      <button data-view="rules">Rules</button>
+      <button data-view="leftovers">Leftovers</button>
+      <button data-view="price">Price</button>
+    </nav>
+  </header>
+  <main>
+    <section id="home" class="view on">
+      <p class="mute">House brand. Not a dump of internet casseroles. One free door. The rest is the kitchen.</p>
+      <div class="recipe-list">
+        <button class="link" data-go="skillet">
+          <span class="badge free">Free</span>
+          <strong style="display:block;margin-top:.35rem">Cheesy Chicken & Rice Skillet</strong>
+          <span class="mute">15-minute pan. Instant rice. Cheese. Broccoli in with the rice.</span>
+        </button>
+        <button class="link" data-go="zuppa">
+          <span class="badge kitchen">Kitchen</span>
+          <strong style="display:block;margin-top:.35rem">Zuppa Toscana</strong>
+          <span class="mute">5–6 bowls so the kale stays green. Fresh bacon, fresh garlic, blend-back for body.</span>
+        </button>
+      </div>
+      <div class="card">
+        <strong>Launch rule.</strong> Paid kitchen opens when 3–5 cooks are locked from a real stove, not a mood. You have two. Get the next one in a pot before you sell the house.
+      </div>
+    </section>
+
+    <section id="skillet" class="view">
+      <span class="badge free">Free door</span>
+      <h1>SoulJere's Cheesy Chicken & Rice Skillet</h1>
+      <p class="meta" id="sk-meta"></p>
+      <img class="hero" src="skillet_plate.jpg" alt="Plated skillet on blue glass plate" />
+      <p class="caption">Chicken, broccoli rice, Colby Jack.</p>
+      <div class="card toggles">
+        <strong>Toggles</strong>
+        <label class="toggle">Broccoli
+          <select id="sk-broc">
+            <option value="on" selected>On — with the rice</option>
+            <option value="off">Off</option>
+            <option value="frozen">Frozen florets (no thaw)</option>
+          </select>
+        </label>
+        <label class="toggle">Seasoning
+          <select id="sk-season">
+            <option value="blend" selected>Greek-style blend (Cavender's if you have it)</option>
+            <option value="rack">Spice rack mix</option>
+          </select>
+        </label>
+        <label class="toggle">Cheese
+          <select id="sk-cheese">
+            <option value="colby" selected>Colby Jack (house)</option>
+            <option value="cheddar">Sharp cheddar</option>
+          </select>
+        </label>
+        <label class="toggle">Rice body
+          <select id="sk-rice">
+            <option value="2" selected>2 cups instant (standard)</option>
+            <option value="1.5">1½ cups (creamier)</option>
+          </select>
+        </label>
+      </div>
+      <h2>In the pan</h2>
+      <ul class="ing" id="sk-ing"></ul>
+      <h2>Method</h2>
+      <ol class="steps" id="sk-steps"></ol>
+      <div class="card dont" id="sk-dont"></div>
+      <div class="card" id="sk-keep"></div>
+    </section>
+
+    <section id="zuppa" class="view">
+      <span class="badge kitchen">Kitchen</span>
+      <h1>SoulJere's Zuppa Toscana</h1>
+      <p class="meta" id="z-meta"></p>
+      <img class="hero" src="zuppa_bowl.jpg" alt="Bowl of Zuppa Toscana with kale" />
+      <p class="caption">Kale still green. Potato tender. Sausage in the cream.</p>
+      <img class="hero" src="zuppa_board.jpg" alt="Ingredient board for Zuppa Toscana" />
+      <p class="caption">Board as shot. Two russets for this yield.</p>
+      <div class="card toggles">
+        <strong>Toggles</strong>
+        <label class="toggle">Bacon
+          <select id="z-bacon">
+            <option value="fresh" selected>6 oz fresh — half of a 12-oz pack</option>
+            <option value="heavy">8 oz — half of a 16-oz pack</option>
+            <option value="pieces">Recipe pieces (weaker, last resort)</option>
+          </select>
+        </label>
+        <label class="toggle">Garlic
+          <select id="z-garlic">
+            <option value="fresh" selected>Fresh cloves (locked)</option>
+            <option value="jar">Jar minced (not house)</option>
+          </select>
+        </label>
+        <label class="toggle">Heat
+          <select id="z-heat">
+            <option value="mid" selected>Mild sausage + 1/4 tsp flakes</option>
+            <option value="hot">Hot sausage + 1/2 tsp flakes</option>
+          </select>
+        </label>
+        <label class="toggle">Cream
+          <select id="z-cream">
+            <option value="1" selected>1 cup heavy cream</option>
+            <option value="1.5">1½ cups extra rich</option>
+          </select>
+        </label>
+        <label class="toggle">Kale
+          <select id="z-kale">
+            <option value="chop" selected>Ribs off, chopped</option>
+            <option value="tear">Torn leaves</option>
+          </select>
+        </label>
+        <label class="toggle">Body
+          <select id="z-blend">
+            <option value="2" selected>Blend 2 cups potato + broth, return</option>
+            <option value="1">Blend 1 cup (lighter)</option>
+            <option value="off">No blend</option>
+          </select>
+        </label>
+      </div>
+      <h2>In the pot</h2>
+      <ul class="ing" id="z-ing"></ul>
+      <h2>Method</h2>
+      <ol class="steps" id="z-steps"></ol>
+      <div class="card dont">
+        <strong>Don't.</strong> Don't cook the week-pot if you want green kale on day four. Don't default to half a warehouse slab of bacon for 5–6 bowls. Don't skip the splash-and-scrape. Don't add a gallon of water — only enough to cover the potatoes. Don't blend after the kale and cream. Don't boil the cream. Don't salt before you taste.
+      </div>
+      <div class="card">
+        <strong>Leftovers — Zuppa.</strong>
+        Off heat, into shallow containers. Fridge within 2 hours. Eat in 3–4 days for safety; kale is tired by day 3. Freeze 2–3 months — cream may split; whisk on a gentle reheat. Reheat soup to a boil. Do not reheat the whole pot every night. Overnight on the stove is trash.
+      </div>
+    </section>
+
+    <section id="rules" class="view">
+      <h1>House rules</h1>
+      <div class="card">
+        <p><strong>A cook is locked</strong> after it hits a real stove and you would serve it again without a speech.</p>
+        <p><strong>Toggles stay.</strong> Options rewrite the list. They do not hide the default.</p>
+        <p><strong>Instant rice ≠ long-grain bake.</strong> Different method. Label it.</p>
+        <p><strong>Fond stays.</strong> You do not wash the pan between sear and sauce.</p>
+        <p id="rule-temp"><strong>165°F on chicken.</strong> Guessing is not a method.</p>
+        <p id="rule-season"><strong>Seasoning replaces salt</strong> on the skillet meat. Do not stack.</p>
+        <p><strong>Kale does not keep.</strong> Size the pot to the days you will eat it.</p>
+      </div>
+    </section>
+
+    <section id="leftovers" class="view">
+      <h1>Leftovers</h1>
+      <p class="mute">Written for a home stove. Same bones as a food-service class. No certificate required.</p>
+      <div class="card">
+        <h2>The clock</h2>
+        <p id="lo-clock"></p>
+        <p id="lo-zone"></p>
+        <p id="lo-fridge"></p>
+      </div>
+      <div class="card">
+        <h2>Cool it like you mean it</h2>
+        <p>A deep stockpot in the fridge stays warm in the middle for hours.</p>
+        <ul>
+          <li id="lo-shallow"></li>
+          <li>Lid loose until steam drops, then seal.</li>
+          <li>Label the date. Day 1 is cook day.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h2>How long</h2>
+        <p id="lo-long"></p>
+        <p>Quality dies before safety sometimes. If you are guessing, it goes in the can. Do not taste to decide.</p>
+      </div>
+      <div class="card">
+        <h2>Reheat</h2>
+        <ul>
+          <li id="lo-reheat"></li>
+          <li>Soups and gravies: bring to a boil.</li>
+          <li>Microwave: cover, stir, stand, check the center.</li>
+          <li>Do not reheat in a slow cooker.</li>
+          <li>Back in the fridge within 2 hours of that reheat.</li>
+        </ul>
+      </div>
+      <div class="card dont">
+        <strong>Rice note.</strong> Cooked rice can carry <em>Bacillus cereus</em> spores. Cool rice dishes fast. Do not leave the skillet on the stove "for later."
+      </div>
+      <div class="card">
+        <h2>These two pots</h2>
+        <p id="lo-skillet"></p>
+        <p><strong>Zuppa:</strong> 3–4 days safety. Eat by day 3 if you care about the kale. Cream can split in the freezer; whisk it back. Boil the ladle you serve.</p>
+      </div>
+    </section>
+
+    <section id="price" class="view">
+      <h1>Price</h1>
+      <p>Love is the plate. The app is the method. Luke 10:7 still applies when it smells like dinner.</p>
+      <div class="card">
+        <span class="badge free">Always free</span>
+        <h2 style="margin-top:.4rem">The skillet</h2>
+        <p>Full cook, hard rules, broccoli toggle preview. Never paywalled later.</p>
+      </div>
+      <div class="card">
+        <span class="badge kitchen">One-time</span>
+        <div class="price">$9</div>
+        <p>SoulJere's Kitchen unlock: every locked recipe at purchase, all toggles, pantry notes, don't pages. One buy covers the household. No subscription.</p>
+        <p class="mute">Do not sell until 3–5 dishes are locked. Two is a start. It is not a store yet.</p>
+      </div>
+      <div class="card">
+        <h2>Updates</h2>
+        <ul>
+          <li>Fixes to a recipe they already own — free.</li>
+          <li>New toggle on an existing dish — free.</li>
+          <li>New recipe — not free. Pack of 3 = $4. Single extra = $3.</li>
+        </ul>
+      </div>
+    </section>
+    <footer>SoulJere's Kitchen</footer>
+  </main>
+  <script>
+    const $ = (id) => document.getElementById(id);
+    const views = document.querySelectorAll(".view");
+    const navBtns = document.querySelectorAll("nav button");
+    const metric = () => $("units").value === "metric";
+    const u = (us, met) => (metric() ? met : us);
+
+    function show(name) {
+      views.forEach((v) => v.classList.toggle("on", v.id === name));
+      navBtns.forEach((b) => b.classList.toggle("on", b.dataset.view === name));
+      window.scrollTo(0, 0);
+    }
+    navBtns.forEach((b) => b.addEventListener("click", () => show(b.dataset.view)));
+    document.querySelectorAll("[data-go]").forEach((b) =>
+      b.addEventListener("click", () => show(b.dataset.go))
+    );
+
+    function renderUnitsLabels() {
+      $("sk-rice").options[0].text = u("2 cups instant (standard)", "470 ml instant (standard)");
+      $("sk-rice").options[1].text = u("1½ cups (creamier)", "355 ml (creamier)");
+      $("z-bacon").options[0].text = u("6 oz fresh — half of a 12-oz pack", "170 g fresh — half of a 340 g pack");
+      $("z-bacon").options[1].text = u("8 oz — half of a 16-oz pack", "225 g — half of a 454 g pack");
+      $("z-cream").options[0].text = u("1 cup heavy cream", "240 ml heavy cream");
+      $("z-cream").options[1].text = u("1½ cups extra rich", "355 ml extra rich");
+      $("z-blend").options[0].text = u("Blend 2 cups potato + broth, return", "Blend 475 ml potato + broth, return");
+      $("z-blend").options[1].text = u("Blend 1 cup (lighter)", "Blend 240 ml (lighter)");
+    }
+
+    function renderSkillet() {
+      const broc = $("sk-broc").value;
+      const cheese = $("sk-cheese").value;
+      const rice = $("sk-rice").value;
+      const season = $("sk-season").value;
+      const cheeseName = cheese === "colby" ? "shredded Colby Jack" : "shredded sharp cheddar";
+      $("sk-meta").textContent = u(
+        "Yield 4 · Active 15 min · Chicken 1.19 lb (half of 2.38 lb pack) · 165°F",
+        "Yield 4 · Active 15 min · Chicken 540 g (half of 1.08 kg pack) · 74°C"
+      );
+      let brocLine = "No broccoli.";
+      if (broc === "on") brocLine = u("2 cups broccoli florets, bite-size, in with the rice.", "150 g broccoli florets, bite-size, in with the rice.");
+      if (broc === "frozen") brocLine = u("2 cups frozen broccoli florets. Do not thaw.", "150 g frozen broccoli florets. Do not thaw.");
+      const riceLine = rice === "1.5"
+        ? u("1½ cups uncooked instant 5-minute white rice", "355 ml uncooked instant 5-minute white rice")
+        : u("2 cups uncooked instant 5-minute white rice", "470 ml uncooked instant 5-minute white rice");
+      const seasonLine = season === "rack"
+        ? u(
+            "Spice rack: ¼ tsp garlic powder + ¼ tsp onion powder + ¼ tsp dried oregano + black pepper — on the meat only. No extra salt unless it tastes dull after the soup.",
+            "Spice rack: 1 ml garlic powder + 1 ml onion powder + 1 ml dried oregano + black pepper — on the meat only. No extra salt unless it tastes dull after the soup."
+          )
+        : u(
+            "1 to 1¼ tsp Greek-style all-purpose seasoning (Cavender's if you have it) — on the meat only",
+            "5–6 ml Greek-style all-purpose seasoning (Cavender's if you have it) — on the meat only"
+          );
+      const seasonStep = season === "rack"
+        ? "Pat chicken dry. Dust both sides with the spice-rack mix. No extra salt — the soup is already salty."
+        : "Pat chicken dry. Dust both sides with the Greek-style blend. No extra salt.";
+      const seasonDont = season === "rack"
+        ? "Don't pile table salt on the meat before the soup hits."
+        : "Don't salt on top of the blend. It's already salty.";
+      $("sk-ing").innerHTML = [
+        u("1.19 lb thin-sliced boneless skinless chicken breasts (half of a 2.38 lb pack)", "540 g thin-sliced boneless skinless chicken breasts (half of a 1.08 kg pack)"),
+        u("1 Tbsp refined sunflower oil", "15 ml refined sunflower oil"),
+        seasonLine,
+        u("1 can (10.5 oz) condensed cream of chicken soup", "1 can (298 g) condensed cream of chicken soup"),
+        u("1½ cups water", "355 ml water") + (broc === "frozen" ? u(" + 2–3 Tbsp if the pan looks dry", " + 30–45 ml if the pan looks dry") : ""),
+        riceLine,
+        brocLine,
+        u("½–1 cup ", "50–100 g ") + cheeseName,
+      ].map((t) => "<li>" + t + "</li>").join("");
+      $("sk-steps").innerHTML = [
+        seasonStep,
+        u("Hot 12-inch skillet, sunflower oil. 2–3 min per side for color. Do not cook through. Pull. Keep the fond.", "Hot 30 cm skillet, sunflower oil. 2–3 min per side for color. Do not cook through. Pull. Keep the fond."),
+        "Same pan: soup + water. Scrape. Boil.",
+        broc === "off"
+          ? "Stir in the instant rice. Chicken back in with juices. Cover, low, 5 minutes."
+          : "Stir in instant rice and broccoli together. Chicken back in. Cover, low, 5 minutes.",
+        "Off heat. " + cheeseName + " on top. Lid 2 minutes (3 if bagged shreds are stiff). " + u("165°F", "74°C") + ". Rest 2 minutes.",
+      ].map((t) => "<li>" + t + "</li>").join("");
+      $("sk-dont").innerHTML = "<strong>Don't.</strong> Instant rice in a 50-minute bake is glue. " + seasonDont + " Don't crowd " + u("2.38 lb", "1.08 kg") + " in one skillet. Don't cook the chicken through in the sear. Don't add broccoli to the hot oil. Don't rinse the chicken.";
+      $("sk-keep").innerHTML = "<strong>Leftovers — skillet.</strong> Fridge in shallow containers within 2 hours (1 hour if the kitchen is over " + u("90°F", "32°C") + "). Cool rice fast. Eat in 3–4 days. Reheat only what you will eat to " + u("165°F", "74°C") + ". Overnight on the stove is trash. Do not taste to check.";
+    }
+
+    function renderZuppa() {
+      const bacon = $("z-bacon").value;
+      const garlic = $("z-garlic").value;
+      const heat = $("z-heat").value;
+      const cream = $("z-cream").value;
+      const kale = $("z-kale").value;
+      const blend = $("z-blend").value;
+      $("z-meta").textContent = u(
+        "Yield 5–6 bowls · Eat in 2–3 days · About 45 min · Blend 2 cups for body · Cream last",
+        "Yield 5–6 bowls · Eat in 2–3 days · About 45 min · Blend 475 ml for body · Cream last"
+      );
+      const sausage = heat === "hot"
+        ? u("1 lb hot Italian sausage", "454 g hot Italian sausage")
+        : u("1 lb Italian sausage (mild)", "454 g Italian sausage (mild)");
+      const flakes = heat === "hot" ? u("½ tsp red pepper flakes", "2.5 ml red pepper flakes") : u("¼ tsp red pepper flakes", "1 ml red pepper flakes");
+      const garlicLine = garlic === "fresh" ? "3–4 fresh garlic cloves, minced" : u("1½ tsp jar minced garlic (not house)", "7 ml jar minced garlic (not house)");
+      let baconLine = u("6 oz fresh bacon, chopped — half of a 12-oz pack (about 6 slices)", "170 g fresh bacon, chopped — half of a 340 g pack (about 6 slices)");
+      if (bacon === "heavy") baconLine = u("8 oz fresh bacon, chopped — half of a 16-oz pack", "225 g fresh bacon, chopped — half of a 454 g pack");
+      if (bacon === "pieces") baconLine = "1 pouch bacon recipe pieces (last resort — no render fat)";
+      const creamLine = cream === "1.5" ? u("1½ cups heavy whipping cream", "355 ml heavy whipping cream") : u("1 cup heavy whipping cream", "240 ml heavy whipping cream");
+      let blendLine = u("Blender for 2 cups potato + broth", "Blender for 475 ml potato + broth");
+      if (blend === "1") blendLine = u("Blender for 1 cup potato + broth", "Blender for 240 ml potato + broth");
+      if (blend === "off") blendLine = "No blender";
+      $("z-ing").innerHTML = [
+        sausage, baconLine, "1 medium yellow onion, diced", garlicLine, flakes,
+        u("1 carton chicken cooking stock (about 32 oz / 4 cups), plus water only to cover the potatoes", "1 carton chicken cooking stock (about 950 ml), plus water only to cover the potatoes"),
+        u("2 medium-large russets, peeled, ½-inch half-moons — about 1.5–1.75 lb", "2 medium-large russets, peeled, 1 cm half-moons — about 680–800 g"),
+        kale === "chop" ? "1 bunch kale, ribs stripped, chopped" : "1 bunch kale, stems off, leaves torn",
+        creamLine, blendLine,
+        "Black pepper at the end if it needs it. Salt only after tasting.",
+      ].map((t) => "<li>" + t + "</li>").join("");
+      let baconStep = u("Same pot: 6 oz chopped fresh bacon over medium. Render until edges crisp. Leave about 2 Tbsp fat.", "Same pot: 170 g chopped fresh bacon over medium. Render until edges crisp. Leave about 30 ml fat.");
+      if (bacon === "heavy") baconStep = u("Same pot: 8 oz chopped fresh bacon. Render. Keep about 2 Tbsp fat.", "Same pot: 225 g chopped fresh bacon. Render. Keep about 30 ml fat.");
+      if (bacon === "pieces") baconStep = "No render step. Stir the pieces in with the kale.";
+      let blendStep = u("Ladle 2 cups potato and broth. Blend. Pour back.", "Ladle 475 ml potato and broth. Blend. Pour back.");
+      if (blend === "1") blendStep = u("Blend 1 cup potato and broth. Return.", "Blend 240 ml potato and broth. Return.");
+      if (blend === "off") blendStep = "Skip the blend. Broth stays thinner.";
+      $("z-steps").innerHTML = [
+        u("Brown the sausage in a 5–6 qt pot. Pull. Leave the browned bits.", "Brown the sausage in a 5–6 L pot. Pull. Leave the browned bits."),
+        baconStep,
+        garlic === "fresh" ? "Onion in the fat until soft. Fresh garlic + flakes, 30–60 seconds." : "Onion soft. Jar garlic + flakes, 20–30 seconds.",
+        u("Splash in about ½ cup stock. Scrape the fond.", "Splash in about 120 ml stock. Scrape the fond."),
+        "Potatoes in. Rest of the stock. Water only until the potatoes are just covered.",
+        "Simmer until a knife slides through, 12–15 minutes.",
+        blendStep,
+        "Kale and sausage back in. 3–5 minutes, wilted and still green.",
+        "Drop heat. Stir in the cream. Do not hard-boil. Taste before you salt.",
+        "Rest 5 minutes. Eat this pot in 2–3 days.",
+      ].map((t) => "<li>" + t + "</li>").join("");
+    }
+
+    function renderLeftovers() {
+      $("rule-temp").innerHTML = u("<strong>165°F on chicken.</strong> Guessing is not a method.", "<strong>74°C on chicken.</strong> Guessing is not a method.");
+      $("lo-clock").innerHTML = u("<strong>2 hours</strong> from the stove to the fridge. <strong>1 hour</strong> if the room is over 90°F. After that, throw it away.", "<strong>2 hours</strong> from the stove to the fridge. <strong>1 hour</strong> if the room is over 32°C. After that, throw it away.");
+      $("lo-zone").innerHTML = u("Danger zone is <strong>40°F–140°F</strong>.", "Danger zone is <strong>4°C–60°C</strong>.");
+      $("lo-fridge").innerHTML = u("Fridge at <strong>40°F or below</strong>. Check it with a thermometer, not hope.", "Fridge at <strong>4°C or below</strong>. Check it with a thermometer, not hope.");
+      $("lo-shallow").textContent = u("Split into shallow containers, 2 inches deep or less.", "Split into shallow containers, 5 cm deep or less.");
+      $("lo-long").innerHTML = u("Most cooked leftovers: <strong>3–4 days in the fridge</strong>. Freeze for quality about <strong>2–3 months</strong> (safe longer at 0°F).", "Most cooked leftovers: <strong>3–4 days in the fridge</strong>. Freeze for quality about <strong>2–3 months</strong> (safe longer at −18°C).");
+      $("lo-reheat").innerHTML = u("Heat only the portion you will eat to <strong>165°F</strong>.", "Heat only the portion you will eat to <strong>74°C</strong>.");
+      $("lo-skillet").innerHTML = u("<strong>Skillet:</strong> 3–4 days fridge. Splash liquid on reheat. 165°F on the chicken.", "<strong>Skillet:</strong> 3–4 days fridge. Splash liquid on reheat. 74°C on the chicken.");
+    }
+
+    function renderAll() {
+      renderUnitsLabels();
+      renderSkillet();
+      renderZuppa();
+      renderLeftovers();
+    }
+
+    ["sk-broc", "sk-cheese", "sk-rice", "sk-season"].forEach((id) => $(id).addEventListener("change", renderSkillet));
+    ["z-bacon", "z-garlic", "z-heat", "z-cream", "z-kale", "z-blend"].forEach((id) => $(id).addEventListener("change", renderZuppa));
+    $("units").addEventListener("change", () => {
+      try { localStorage.setItem("souljere-units", $("units").value); } catch (e) {}
+      renderAll();
+    });
+    try {
+      const saved = localStorage.getItem("souljere-units");
+      if (saved === "metric" || saved === "us") $("units").value = saved;
+    } catch (e) {}
+    renderAll();
+  </script>
+</body>
+</html>
